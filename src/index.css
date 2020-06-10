@@ -15,11 +15,15 @@
   background: #40bfbb;
 }
 
+.orange {
+  background: orange;
+}
+
 .celeste {
   background: #40bfbb;
 }
-.rojo {
-  color: red;
+.red {
+  background: red;
 }
 .celeste-border {
   border: solid;

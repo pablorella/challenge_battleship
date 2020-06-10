@@ -1,7 +1,7 @@
 import { ACTIVAR_GRILLA } from "../types";
 import { GUARDAR_POSICION_ACTUAL } from "../types";
-import { GUARDAR_CELDAS_PINTAR } from "../types";
-import { CHANGUE_SENSE } from "../types";
+import { SAVE_CELL_PAINT } from "../types";
+import { CHANGUE_DIRECTION } from "../types";
 import { BARCO_SELECCIONADO } from "../types";
 import { DELETE_LISTED_BOAT } from "../types";
 import { ASIGNAR_CARRIER } from "../types";
@@ -10,6 +10,19 @@ import { ASIGNAR_CRUISERS2 } from "../types";
 import { ASIGNAR_CRUISERS3 } from "../types";
 import { ASIGNAR_SUBMARINE } from "../types";
 import { START_GAME } from "../types";
+import { CHANGUE_TURN_HUMAN } from "../types";
+import { ADD_SELECTION_SHIT_HUMAN } from "../types";
+import { IMPACT_CARRIER } from "../types";
+import { IMPACT_CRUISERS1 } from "../types";
+import { IMPACT_CRUISERS2 } from "../types";
+import { IMPACT_CRUISERS3 } from "../types";
+import { IMPACT_SUBMARINE } from "../types";
+import { IMPACT_CARRIER_CPU } from "../types";
+import { IMPACT_CRUISERS1_CPU } from "../types";
+import { IMPACT_CRUISERS2_CPU } from "../types";
+import { IMPACT_CRUISERS3_CPU } from "../types";
+import { IMPACT_SUBMARINE_CPU } from "../types";
+import { LAST_IMPACT } from "../types";
 
 //cada reducer tiene su propio state
 const initialState = {
@@ -19,16 +32,64 @@ const initialState = {
   celdasOcupadas: [],
   posicionActual: [],
   celdaParaPintar: [],
-  celdaParaPintarComputer: [[0, 0]],
+  celdaParaPintarComputer: [[2, 3]],
   senseHorizontal: false,
   barcoClick: "",
   gameStarted: false,
-  celdasOcupadasComputer: [[2, 3]],
-  carrier: { posicion: "hola", impactos: "" },
-  cruisers1: { posicion: [], impactos: "" },
-  cruisers2: { posicion: [], impactos: "" },
-  cruisers3: { posicion: [], impactos: "" },
-  submarine: { posicion: [], impactos: "" },
+  turnHuman: true,
+  celdasOcupadasComputer: [],
+  carrier: { posicion: [], impactos: 0 },
+  cruisers1: { posicion: [], impactos: 0 },
+  cruisers2: { posicion: [], impactos: 0 },
+  cruisers3: { posicion: [], impactos: 0 },
+  submarine: { posicion: [], impactos: 0 },
+  celdasImpactadasToCpu: [],
+  lastImpact: true,
+  carrier_cpu: {
+    posicion: [
+      [0, 1],
+      [0, 2],
+      [0, 3],
+      [0, 4],
+    ],
+    impactos: 0,
+    hundido: false,
+  },
+  cruisers1_cpu: {
+    posicion: [
+      [1, 1],
+      [1, 2],
+      [1, 3],
+    ],
+    impactos: 0,
+    hundido: false,
+  },
+  cruisers2_cpu: {
+    posicion: [
+      [5, 6],
+      [5, 7],
+      [5, 8],
+    ],
+    impactos: 0,
+    hundido: false,
+  },
+  cruisers3_cpu: {
+    posicion: [
+      [7, 6],
+      [7, 7],
+      [7, 8],
+    ],
+    impactos: 0,
+    hundido: false,
+  },
+  submarine_cpu: {
+    posicion: [
+      [9, 8],
+      [9, 9],
+    ],
+    impactos: 0,
+    hundido: false,
+  },
   barcosDisponiblesParaEleccion: [
     "carrier",
     "cruisers1",
@@ -60,7 +121,7 @@ export default function (state = initialState, action) {
         ...state,
         posicionActual: action.payload.posicion,
       };
-    case GUARDAR_CELDAS_PINTAR:
+    case SAVE_CELL_PAINT:
       return {
         ...state,
         celdaParaPintar: action.payload.map((item) =>
@@ -68,7 +129,7 @@ export default function (state = initialState, action) {
         ),
       };
 
-    case CHANGUE_SENSE:
+    case CHANGUE_DIRECTION:
       return {
         ...state,
         senseHorizontal: action.payload,
@@ -90,47 +151,150 @@ export default function (state = initialState, action) {
     case ASIGNAR_CARRIER:
       return {
         ...state,
-        carrier: action.payload.json,
+        carrier: { ...state.carrier, posicion: action.payload.celdaParaPintar },
+
         celdasOcupadas: state.celdasOcupadas.concat(
-          action.payload.json.posicion
+          action.payload.celdaParaPintar
         ),
       };
     case ASIGNAR_CRUISERS1:
       return {
         ...state,
-        cruisers1: action.payload.json,
+        cruisers1: {
+          ...state.cruisers1,
+          posicion: action.payload.celdaParaPintar,
+        },
+
         celdasOcupadas: state.celdasOcupadas.concat(
-          action.payload.json.posicion
+          action.payload.celdaParaPintar
         ),
       };
     case ASIGNAR_CRUISERS2:
       return {
         ...state,
-        cruisers2: action.payload.json,
+        cruisers2: {
+          ...state.cruisers2,
+          posicion: action.payload.celdaParaPintar,
+        },
+
         celdasOcupadas: state.celdasOcupadas.concat(
-          action.payload.json.posicion
+          action.payload.celdaParaPintar
         ),
       };
     case ASIGNAR_CRUISERS3:
       return {
         ...state,
-        cruisers3: action.payload.json,
+        cruisers3: {
+          ...state.cruisers3,
+          posicion: action.payload.celdaParaPintar,
+        },
+
         celdasOcupadas: state.celdasOcupadas.concat(
-          action.payload.json.posicion
+          action.payload.celdaParaPintar
         ),
       };
     case ASIGNAR_SUBMARINE:
       return {
         ...state,
-        submarine: action.payload.json,
+        submarine: {
+          ...state.submarine,
+          posicion: action.payload.celdaParaPintar,
+        },
+
         celdasOcupadas: state.celdasOcupadas.concat(
-          action.payload.json.posicion
+          action.payload.celdaParaPintar
         ),
       };
     case START_GAME:
       return {
         ...state,
         gameStarted: true,
+      };
+    case CHANGUE_TURN_HUMAN:
+      return {
+        ...state,
+        turnHuman: !action.payload,
+      };
+
+    case ADD_SELECTION_SHIT_HUMAN:
+      return {
+        ...state,
+        celdaParaPintarComputer: state.celdaParaPintarComputer.concat(
+          action.payload
+        ),
+      };
+    case IMPACT_CARRIER_CPU:
+      return {
+        ...state,
+        /* carrier: [...state, (state.posicion = 1], */
+        carrier_cpu: {
+          ...state.carrier_cpu,
+          impactos: state.carrier_cpu.impactos + 1,
+          hundido: action.payload.hundido,
+        },
+        celdasImpactadasToCpu: state.celdasImpactadasToCpu.concat(
+          action.payload.celdas
+        ),
+      };
+    //----------------------------------//---------//---
+    case IMPACT_CRUISERS1_CPU:
+      return {
+        ...state,
+        /* carrier: [...state, (state.posicion = 1], */
+        cruisers1_cpu: {
+          ...state.cruisers1_cpu,
+          impactos: state.cruisers1_cpu.impactos + 1,
+          hundido: action.payload.hundido,
+        },
+        celdasImpactadasToCpu: state.celdasImpactadasToCpu.concat(
+          action.payload.celdas
+        ),
+      };
+    case IMPACT_CRUISERS2_CPU:
+      return {
+        ...state,
+        /* carrier: [...state, (state.posicion = 1], */
+        cruisers2_cpu: {
+          ...state.cruisers2_cpu,
+          impactos: state.cruisers2_cpu.impactos + 1,
+          hundido: action.payload.hundido,
+        },
+        celdasImpactadasToCpu: state.celdasImpactadasToCpu.concat(
+          action.payload.celdas
+        ),
+      };
+    case IMPACT_CRUISERS3_CPU:
+      return {
+        ...state,
+        /* carrier: [...state, (state.posicion = 1], */
+        cruisers3_cpu: {
+          ...state.cruisers3_cpu,
+          impactos: state.cruisers3_cpu.impactos + 1,
+          hundido: action.payload.hundido,
+        },
+        celdasImpactadasToCpu: state.celdasImpactadasToCpu.concat(
+          action.payload.celdas
+        ),
+      };
+    case IMPACT_SUBMARINE_CPU:
+      return {
+        ...state,
+        /* carrier: [...state, (state.posicion = 1], */
+        submarine_cpu: {
+          ...state.submarine_cpu,
+          impactos: state.submarine_cpu.impactos + 1,
+          hundido: action.payload.hundido,
+        },
+        celdasImpactadasToCpu: state.celdasImpactadasToCpu.concat(
+          action.payload.celdas
+        ),
+      };
+
+    case LAST_IMPACT:
+      return {
+        ...state,
+
+        lastImpact: !state.lastImpact,
       };
     default:
       return state;
