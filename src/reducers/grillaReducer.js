@@ -23,6 +23,8 @@ import { IMPACT_CRUISERS2_CPU } from "../types";
 import { IMPACT_CRUISERS3_CPU } from "../types";
 import { IMPACT_SUBMARINE_CPU } from "../types";
 import { LAST_IMPACT } from "../types";
+import { ADD_SELECTION_CPU } from "../types";
+import { ADD_CELL_RANDOM } from "../types";
 
 //cada reducer tiene su propio state
 const initialState = {
@@ -32,19 +34,38 @@ const initialState = {
   celdasOcupadas: [],
   posicionActual: [],
   celdaParaPintar: [],
-  celdaParaPintarComputer: [[2, 3]],
+  celdaParaPintarComputer: [],
   senseHorizontal: false,
   barcoClick: "",
   gameStarted: false,
   turnHuman: true,
-  celdasOcupadasComputer: [],
-  carrier: { posicion: [], impactos: 0 },
-  cruisers1: { posicion: [], impactos: 0 },
-  cruisers2: { posicion: [], impactos: 0 },
-  cruisers3: { posicion: [], impactos: 0 },
-  submarine: { posicion: [], impactos: 0 },
+  celdasRandom: [],
+  carrier: { posicion: [], impactos: 0, hundido: false },
+  cruisers1: { posicion: [], impactos: 0, hundido: false },
+  cruisers2: { posicion: [], impactos: 0, hundido: false },
+  cruisers3: { posicion: [], impactos: 0, hundido: false },
+  submarine: { posicion: [], impactos: 0, hundido: false },
   celdasImpactadasToCpu: [],
+  cellsDisponiblesParaRandom: [
+    [0, 0],
+    [0, 1],
+    [5, 2],
+    [6, 3],
+    [7, 4],
+    [7, 5],
+    [8, 6],
+    [9, 0],
+    [2, 1],
+    [3, 2],
+    [4, 3],
+    [5, 4],
+    [6, 5],
+    [9, 9],
+  ],
+  celdasImpactadasToHuman: [],
   lastImpact: true,
+  celdaParaPintarHuman: [],
+
   carrier_cpu: {
     posicion: [
       [0, 1],
@@ -152,7 +173,9 @@ export default function (state = initialState, action) {
       return {
         ...state,
         carrier: { ...state.carrier, posicion: action.payload.celdaParaPintar },
-
+        cellsDisponiblesParaRandom: state.cellsDisponiblesParaRandom.concat(
+          action.payload.celdaParaPintar
+        ),
         celdasOcupadas: state.celdasOcupadas.concat(
           action.payload.celdaParaPintar
         ),
@@ -164,7 +187,9 @@ export default function (state = initialState, action) {
           ...state.cruisers1,
           posicion: action.payload.celdaParaPintar,
         },
-
+        cellsDisponiblesParaRandom: state.cellsDisponiblesParaRandom.concat(
+          action.payload.celdaParaPintar
+        ),
         celdasOcupadas: state.celdasOcupadas.concat(
           action.payload.celdaParaPintar
         ),
@@ -176,7 +201,9 @@ export default function (state = initialState, action) {
           ...state.cruisers2,
           posicion: action.payload.celdaParaPintar,
         },
-
+        cellsDisponiblesParaRandom: state.cellsDisponiblesParaRandom.concat(
+          action.payload.celdaParaPintar
+        ),
         celdasOcupadas: state.celdasOcupadas.concat(
           action.payload.celdaParaPintar
         ),
@@ -188,7 +215,9 @@ export default function (state = initialState, action) {
           ...state.cruisers3,
           posicion: action.payload.celdaParaPintar,
         },
-
+        cellsDisponiblesParaRandom: state.cellsDisponiblesParaRandom.concat(
+          action.payload.celdaParaPintar
+        ),
         celdasOcupadas: state.celdasOcupadas.concat(
           action.payload.celdaParaPintar
         ),
@@ -196,6 +225,9 @@ export default function (state = initialState, action) {
     case ASIGNAR_SUBMARINE:
       return {
         ...state,
+        cellsDisponiblesParaRandom: state.cellsDisponiblesParaRandom.concat(
+          action.payload.celdaParaPintar
+        ),
         submarine: {
           ...state.submarine,
           posicion: action.payload.celdaParaPintar,
@@ -213,7 +245,7 @@ export default function (state = initialState, action) {
     case CHANGUE_TURN_HUMAN:
       return {
         ...state,
-        turnHuman: !action.payload,
+        turnHuman: !state.turnHuman,
       };
 
     case ADD_SELECTION_SHIT_HUMAN:
@@ -222,6 +254,22 @@ export default function (state = initialState, action) {
         celdaParaPintarComputer: state.celdaParaPintarComputer.concat(
           action.payload
         ),
+      };
+
+    case ADD_CELL_RANDOM:
+      return {
+        ...state,
+        celdasRandom: state.celdasRandom.concat(action.payload),
+        cellsDisponiblesParaRandom: state.cellsDisponiblesParaRandom.filter(
+          (item) => item.join() !== "" + action.payload[0] + "",
+          +action.payload[1] + ""
+        ),
+      };
+
+    case ADD_SELECTION_CPU:
+      return {
+        ...state,
+        celdaParaPintarHuman: state.celdaParaPintarHuman.concat(action.payload),
       };
     case IMPACT_CARRIER_CPU:
       return {
@@ -296,6 +344,74 @@ export default function (state = initialState, action) {
 
         lastImpact: !state.lastImpact,
       };
+    //desp de aca agregue
+    case IMPACT_CARRIER:
+      return {
+        ...state,
+        /* carrier: [...state, (state.posicion = 1], */
+        carrier: {
+          ...state.carrier,
+          impactos: state.carrier.impactos + 1,
+          hundido: action.payload.hundido,
+        },
+        celdasImpactadasToHuman: state.celdasImpactadasToHuman.concat(
+          action.payload.celdas
+        ),
+      };
+    //----------------------------------//---------//---
+    case IMPACT_CRUISERS1:
+      return {
+        ...state,
+        /* carrier: [...state, (state.posicion = 1], */
+        cruisers1: {
+          ...state.cruisers1,
+          impactos: state.cruisers1.impactos + 1,
+          hundido: action.payload.hundido,
+        },
+        celdasImpactadasToHuman: state.celdasImpactadasToHuman.concat(
+          action.payload.celdas
+        ),
+      };
+    case IMPACT_CRUISERS2:
+      return {
+        ...state,
+        /* carrier: [...state, (state.posicion = 1], */
+        cruisers2: {
+          ...state.cruisers2,
+          impactos: state.cruisers2.impactos + 1,
+          hundido: action.payload.hundido,
+        },
+        celdasImpactadasToHuman: state.celdasImpactadasToHuman.concat(
+          action.payload.celdas
+        ),
+      };
+    case IMPACT_CRUISERS3:
+      return {
+        ...state,
+        /* carrier: [...state, (state.posicion = 1], */
+        cruisers3: {
+          ...state.cruisers3,
+          impactos: state.cruisers3.impactos + 1,
+          hundido: action.payload.hundido,
+        },
+        celdasImpactadasToHuman: state.celdasImpactadasToHuman.concat(
+          action.payload.celdas
+        ),
+      };
+    case IMPACT_SUBMARINE:
+      return {
+        ...state,
+        /* carrier: [...state, (state.posicion = 1], */
+        submarine: {
+          ...state.submarine,
+          impactos: state.submarine.impactos + 1,
+          hundido: action.payload.hundido,
+        },
+        celdasImpactadasToHuman: state.celdasImpactadasToHuman.concat(
+          action.payload.celdas
+        ),
+      };
+
     default:
       return state;
   }

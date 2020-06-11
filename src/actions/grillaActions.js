@@ -23,6 +23,8 @@ import { IMPACT_CRUISERS2_CPU } from "../types";
 import { IMPACT_CRUISERS3_CPU } from "../types";
 import { IMPACT_SUBMARINE_CPU } from "../types";
 import { LAST_IMPACT } from "../types";
+import { ADD_SELECTION_CPU } from "../types";
+import { ADD_CELL_RANDOM } from "../types";
 
 //usar barcos que tenemos
 /* export function eleccionBarcoDeLosDisponibles() {
@@ -37,7 +39,7 @@ export function habilarGrillaAction(grilla) {
     // agregarGrilla();
     // dispatch( agregarProducto() );
   }; */
-  console.log("desde el action" + grilla);
+  //console.log("desde el action" + grilla);
   return (dispatch) => {
     dispatch(cambiarGrilla(grilla));
   };
@@ -90,7 +92,7 @@ export function handleChangueSense(grilla) {
     // agregarGrilla();
     // dispatch( agregarProducto() );
   }; */
-  console.log("desde el action" + grilla);
+  // console.log("desde el action" + grilla);
   return (dispatch) => {
     dispatch(changueSense(grilla));
   };
@@ -108,7 +110,7 @@ export function seleccionBarco(grilla) {
     // agregarGrilla();
     // dispatch( agregarProducto() );
   }; */
-  console.log("desde el action" + grilla);
+  //console.log("desde el action" + grilla);
   return (dispatch) => {
     dispatch(seleccionarBarco(grilla));
   };
@@ -126,7 +128,6 @@ export function deleteListedBoat(grilla) {
     }; */
   //console.log("desde el action CLICK ELMINAR" + grilla);
   return (dispatch) => {
-    console.log("choto:" + grilla.celdaParaPintar);
     dispatch(deleteListedBoardd(grilla));
     //console.log("que hay aca:" + grilla.barcoClick);
 
@@ -228,6 +229,44 @@ export function addCellHumanSelection(grilla) {
 }
 const addSelectionHuman = (grilla) => ({
   type: ADD_SELECTION_SHIT_HUMAN,
+  /* payload: [1, 2], */
+  payload: grilla,
+});
+
+export function addCellCpuSelection(grilla) {
+  /*   return () => {
+    console.log("desde el action");
+    // agregarGrilla();
+    // dispatch( agregarProducto() );
+  }; */
+  return (dispatch) => {
+    dispatch(addSelectionCpu(grilla));
+  };
+  /*  return () => {
+    console.log("desde el action", grilla);
+  }; */
+}
+const addSelectionCpu = (grilla) => ({
+  type: ADD_SELECTION_CPU,
+  /* payload: [1, 2], */
+  payload: grilla,
+});
+
+export function changuecelRandom(grilla) {
+  /*   return () => {
+    console.log("desde el action");
+    // agregarGrilla();
+    // dispatch( agregarProducto() );
+  }; */
+  return (dispatch) => {
+    dispatch(addRandom(grilla));
+  };
+  /*  return () => {
+    console.log("desde el action", grilla);
+  }; */
+}
+const addRandom = (grilla) => ({
+  type: ADD_CELL_RANDOM,
   /* payload: [1, 2], */
   payload: grilla,
 });

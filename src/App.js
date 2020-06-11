@@ -10,7 +10,7 @@ function App() {
     <Provider store={store}>
       <div className="App">
         <div className="container">
-          <h1 className="mt-2 mb-4">welcome to battle</h1>
+          <h1 className="mt-2 mb-4">Battleship</h1>
           <Dashboard />
         </div>
       </div>

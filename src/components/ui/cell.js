@@ -8,6 +8,8 @@ import { changueTurnToHuman } from "../../actions/grillaActions";
 import { addCellHumanSelection } from "../../actions/grillaActions";
 import { impactsShitss } from "../../actions/grillaActions";
 import { changueLastImpact } from "../../actions/grillaActions";
+import { addCellCpuSelection } from "../../actions/grillaActions";
+import { changuecelRandom } from "../../actions/grillaActions";
 
 const Cell = (props) => {
   //console.log(props.i);
@@ -19,19 +21,32 @@ const Cell = (props) => {
     dispatch(agregarCeldasParaPintar(grilla));
   const deleteListedBoatt = (grilla) => dispatch(deleteListedBoat(grilla));
   const impactsShits = (grilla) => dispatch(impactsShitss(grilla));
+
+  const addSelectCpu = (grilla) => dispatch(addCellCpuSelection(grilla));
+
   const addCellHumanSelect = (grilla) =>
     dispatch(addCellHumanSelection(grilla));
+
+  const cellsDisponiblesParaRand = useSelector(
+    (state) => state.grilla.cellsDisponiblesParaRandom
+  );
   const PlaygameStarted = useSelector((state) => state.grilla.gameStarted);
   const barcoClick = useSelector((state) => state.grilla.barcoClick);
   const celdaParaPintar = useSelector((state) => state.grilla.celdaParaPintar);
   const senseHorizontal = useSelector((state) => state.grilla.senseHorizontal);
 
+  const addCellRandom = (grilla) => dispatch(changuecelRandom(grilla));
   const carrier_cpuu = useSelector((state) => state.grilla.carrier_cpu);
   const cruisers1_cpuu = useSelector((state) => state.grilla.cruisers1_cpu);
   const cruisers2_cpuu = useSelector((state) => state.grilla.cruisers2_cpu);
   const cruisers3_cpuu = useSelector((state) => state.grilla.cruisers3_cpu);
   const submarine_cpuu = useSelector((state) => state.grilla.submarine_cpu);
 
+  const carrier_human = useSelector((state) => state.grilla.carrier);
+  const cruisers1_human = useSelector((state) => state.grilla.cruisers1);
+  const cruisers2_human = useSelector((state) => state.grilla.cruisers2);
+  const cruisers3_human = useSelector((state) => state.grilla.cruisers3);
+  const submarine_human = useSelector((state) => state.grilla.submarine);
   const turnHumann = useSelector((state) => state.grilla.turnHuman);
 
   const changueLastImpactt = (grilla) => dispatch(changueLastImpact(grilla));
@@ -43,8 +58,13 @@ const Cell = (props) => {
     (state) => state.grilla.celdaParaPintarComputer
   );
 
+  const celdasRandomm = useSelector((state) => state.grilla.celdasRandom);
   const celdasImpactadasToCpuu = useSelector(
     (state) => state.grilla.celdasImpactadasToCpu
+  );
+
+  const celdasImpactadasToHumann = useSelector(
+    (state) => state.grilla.celdasImpactadasToHuman
   );
 
   const hadleClick = (e) => {
@@ -54,7 +74,7 @@ const Cell = (props) => {
     ); */
 
     e.preventDefault();
-    console.log("celdas_cpu:" + celdasImpactadasToCpuu);
+    // console.log("celdas_cpu:" + celdasImpactadasToCpuu);
     //console.log("Coordenadas: I:" + props.i + "j:" + props.j);
     if (turnHumann && !PlaygameStarted) {
       //tiene q borrar el barco de la lista para no volverlo a elegir
@@ -74,7 +94,7 @@ const Cell = (props) => {
           changueLastImpactt();
         } */
       addCellHumanSelect([[props.i, props.j]]);
-
+      //  changueTurnToHumannn(false);
       //if (props.i === 0 && props.j === 1) {
       if (devolverEsta(props.i, props.j, carrier_cpuu.posicion)) {
         if (carrier_cpuu.impactos === 3) {
@@ -153,6 +173,102 @@ const Cell = (props) => {
           });
         }
       }
+
+      // changueTurnToHumannn(turnHumann);
+
+      /*  if (lastImpactt) {
+          changueLastImpactt();
+        } */
+      function randomInt(min, max) {
+        return min + Math.floor((max - min) * Math.random());
+      }
+      // console.log([[randomInt(0, 9), randomInt(0, 9)]]);
+
+      let eleccion = randomInt(0, cellsDisponiblesParaRand.length);
+      let i = cellsDisponiblesParaRand[eleccion][0];
+      let j = cellsDisponiblesParaRand[eleccion][1];
+
+      addCellRandom([[i, j]]);
+      // addSelectCpu;([[i, j]]);
+      //changueTurnToHumannn();
+      //if (props.i === 0 && props.j === 1) {
+      if (devolverEsta(i, j, carrier_human.posicion)) {
+        if (carrier_human.impactos === 3) {
+          impactsShits({
+            nombre: "carrier",
+            celdas: [[i, j]],
+            hundido: true,
+          });
+        } else {
+          impactsShits({
+            nombre: "carrier",
+            celdas: [[i, j]],
+            hundido: false,
+          });
+        }
+        //de la cpu impactsShits({ nombre: "carrier", celdas: [[i, j]] });
+        // changueLastImpactt();
+      }
+      if (devolverEsta(i, j, cruisers1_human.posicion)) {
+        if (cruisers1_human.impactos === 2) {
+          impactsShits({
+            nombre: "cruisers1",
+            celdas: [[i, j]],
+            hundido: true,
+          });
+        } else {
+          impactsShits({
+            nombre: "cruisers1",
+            celdas: [[i, j]],
+            hundido: false,
+          });
+        }
+      }
+      if (devolverEsta(i, j, cruisers2_human.posicion)) {
+        if (cruisers2_human.impactos === 2) {
+          impactsShits({
+            nombre: "cruisers2",
+            celdas: [[i, j]],
+            hundido: true,
+          });
+        } else {
+          impactsShits({
+            nombre: "cruisers2",
+            celdas: [[i, j]],
+            hundido: false,
+          });
+        }
+      }
+      if (devolverEsta(i, j, cruisers3_human.posicion)) {
+        if (cruisers3_human.impactos === 2) {
+          impactsShits({
+            nombre: "cruisers3",
+            celdas: [[i, j]],
+            hundido: true,
+          });
+        } else {
+          impactsShits({
+            nombre: "cruisers3",
+            celdas: [[i, j]],
+            hundido: false,
+          });
+        }
+      }
+      if (devolverEsta(i, j, submarine_human.posicion)) {
+        if (submarine_human.impactos === 1) {
+          impactsShits({
+            nombre: "submarine",
+            celdas: [[i, j]],
+            hundido: true,
+          });
+        } else {
+          impactsShits({
+            nombre: "submarine",
+            celdas: [[i, j]],
+            hundido: false,
+          });
+        }
+      }
     }
   };
 
@@ -160,109 +276,51 @@ const Cell = (props) => {
     //console.log("Coordenadas: I:" + props.i + "j:" + props.j);
     //e.target.style.background = "#40bfbb;";
     //console.log(e.MouseEvent.clientX );
+    if (!PlaygameStarted) {
+      if (barcoClick !== "") {
+        //console.log("barco click" + barcoClick);
 
-    if (barcoClick !== "") {
-      //console.log("barco click" + barcoClick);
-
-      cambiarPosActual({ posicion: [props.i, props.j] });
-      switch (barcoClick) {
-        case "carrier":
-          //console.log("es carrier"); es de 4 espacios
-          //  console.log("fuera" + props.j);
-          if (senseHorizontal) {
-            if (props.j < 7) {
-              //  console.log("dentro" + props.j);
-              agregarCeldasPintarPavlin([
-                [props.i, props.j],
-                [props.i, props.j + 1],
-                [props.i, props.j + 2],
-                [props.i, props.j + 3],
-              ]);
+        cambiarPosActual({ posicion: [props.i, props.j] });
+        switch (barcoClick) {
+          case "carrier":
+            //console.log("es carrier"); es de 4 espacios
+            //  console.log("fuera" + props.j);
+            if (senseHorizontal) {
+              if (props.j < 7) {
+                //  console.log("dentro" + props.j);
+                agregarCeldasPintarPavlin([
+                  [props.i, props.j],
+                  [props.i, props.j + 1],
+                  [props.i, props.j + 2],
+                  [props.i, props.j + 3],
+                ]);
+              } else {
+                agregarCeldasPintar([[]]);
+              }
             } else {
-              agregarCeldasPintar([[]]);
+              if (props.i < 7) {
+                //  console.log("dentro" + props.j);
+                agregarCeldasPintarPavlin([
+                  [props.i, props.j],
+                  [props.i + 1, props.j],
+                  [props.i + 2, props.j],
+                  [props.i + 3, props.j],
+                ]);
+              } else {
+                agregarCeldasPintar([[]]);
+              }
             }
-          } else {
-            if (props.i < 7) {
-              //  console.log("dentro" + props.j);
-              agregarCeldasPintarPavlin([
-                [props.i, props.j],
-                [props.i + 1, props.j],
-                [props.i + 2, props.j],
-                [props.i + 3, props.j],
-              ]);
-            } else {
-              agregarCeldasPintar([[]]);
-            }
-          }
 
-          break;
-        case "cruisers1":
-          //console.log("es carrier"); es de 4 espacios
-          //  console.log("fuera" + props.j);
-          /* console.log(
+            break;
+          case "cruisers1":
+            //console.log("es carrier"); es de 4 espacios
+            //  console.log("fuera" + props.j);
+            /* console.log(
             "i:" + props.i,
             "j:" + props.j,
             "celdas:" + celdasOcupadas
           ); */
 
-          if (senseHorizontal) {
-            if (props.j < 8) {
-              //  console.log("dentro" + props.j);
-              agregarCeldasPintarPavlin([
-                [props.i, props.j],
-                [props.i, props.j + 1],
-                [props.i, props.j + 2],
-              ]);
-            } else {
-              agregarCeldasPintar([[]]);
-            }
-          } else {
-            if (props.i < 8) {
-              //  console.log("dentro" + props.j);
-              agregarCeldasPintarPavlin([
-                [props.i, props.j],
-                [props.i + 1, props.j],
-                [props.i + 2, props.j],
-              ]);
-            } else {
-              agregarCeldasPintar([[]]);
-            }
-          }
-
-          break;
-        case "cruisers2":
-          //console.log("es carrier"); es de 4 espacios
-          //  console.log("fuera" + props.j);
-
-          if (senseHorizontal) {
-            if (props.j < 8) {
-              //  console.log("dentro" + props.j);
-              agregarCeldasPintarPavlin([
-                [props.i, props.j],
-                [props.i, props.j + 1],
-                [props.i, props.j + 2],
-              ]);
-            } else {
-              agregarCeldasPintar([[]]);
-            }
-          } else {
-            if (props.i < 8) {
-              //  console.log("dentro" + props.j);
-              agregarCeldasPintarPavlin([
-                [props.i, props.j],
-                [props.i + 1, props.j],
-                [props.i + 2, props.j],
-              ]);
-            } else {
-              agregarCeldasPintar([[]]);
-            }
-          }
-
-          break;
-        case "cruisers3":
-          //console.log("es carrier"); es de 4 espacios
-          //  console.log("fuera" + props.j);
-          if (!showShip(props.i, props.j, celdasOcupadas)) {
             if (senseHorizontal) {
               if (props.j < 8) {
                 //  console.log("dentro" + props.j);
@@ -286,37 +344,96 @@ const Cell = (props) => {
                 agregarCeldasPintar([[]]);
               }
             }
-          }
-          break;
-        case "submarine":
-          //console.log("es carrier"); es de 4 espacios
-          //  console.log("fuera" + props.j);
-          if (!showShip(props.i, props.j, celdasOcupadas)) {
+
+            break;
+          case "cruisers2":
+            //console.log("es carrier"); es de 4 espacios
+            //  console.log("fuera" + props.j);
+
             if (senseHorizontal) {
-              if (props.j < 9) {
+              if (props.j < 8) {
                 //  console.log("dentro" + props.j);
                 agregarCeldasPintarPavlin([
                   [props.i, props.j],
                   [props.i, props.j + 1],
+                  [props.i, props.j + 2],
                 ]);
               } else {
                 agregarCeldasPintar([[]]);
               }
             } else {
-              if (props.i < 9) {
+              if (props.i < 8) {
                 //  console.log("dentro" + props.j);
                 agregarCeldasPintarPavlin([
                   [props.i, props.j],
                   [props.i + 1, props.j],
+                  [props.i + 2, props.j],
                 ]);
               } else {
                 agregarCeldasPintar([[]]);
               }
             }
-          }
-          break;
-        default:
-          break;
+
+            break;
+          case "cruisers3":
+            //console.log("es carrier"); es de 4 espacios
+            //  console.log("fuera" + props.j);
+            if (!showShip(props.i, props.j, celdasOcupadas)) {
+              if (senseHorizontal) {
+                if (props.j < 8) {
+                  //  console.log("dentro" + props.j);
+                  agregarCeldasPintarPavlin([
+                    [props.i, props.j],
+                    [props.i, props.j + 1],
+                    [props.i, props.j + 2],
+                  ]);
+                } else {
+                  agregarCeldasPintar([[]]);
+                }
+              } else {
+                if (props.i < 8) {
+                  //  console.log("dentro" + props.j);
+                  agregarCeldasPintarPavlin([
+                    [props.i, props.j],
+                    [props.i + 1, props.j],
+                    [props.i + 2, props.j],
+                  ]);
+                } else {
+                  agregarCeldasPintar([[]]);
+                }
+              }
+            }
+            break;
+          case "submarine":
+            //console.log("es carrier"); es de 4 espacios
+            //  console.log("fuera" + props.j);
+            if (!showShip(props.i, props.j, celdasOcupadas)) {
+              if (senseHorizontal) {
+                if (props.j < 9) {
+                  //  console.log("dentro" + props.j);
+                  agregarCeldasPintarPavlin([
+                    [props.i, props.j],
+                    [props.i, props.j + 1],
+                  ]);
+                } else {
+                  agregarCeldasPintar([[]]);
+                }
+              } else {
+                if (props.i < 9) {
+                  //  console.log("dentro" + props.j);
+                  agregarCeldasPintarPavlin([
+                    [props.i, props.j],
+                    [props.i + 1, props.j],
+                  ]);
+                } else {
+                  agregarCeldasPintar([[]]);
+                }
+              }
+            }
+            break;
+          default:
+            break;
+        }
       }
     }
   };
@@ -415,25 +532,79 @@ const Cell = (props) => {
         ))}
       {props.owner === "human" &&
         PlaygameStarted &&
-        (devolverEsta(props.i, props.j, celdaParaPintar) === true ||
-        showShip(props.i, props.j, celdasOcupadas) ? (
+        (devolverEsta(props.i, props.j, celdasOcupadas) === true ? (
+          devolverEsta(props.i, props.j, celdasRandomm) === true ? (
+            devolverEsta(props.i, props.j, celdasImpactadasToHumann) ? (
+              devolverHundido(
+                props.i,
+                props.j,
+                carrier_human.posicion,
+                carrier_human.hundido
+              ) ||
+              devolverHundido(
+                props.i,
+                props.j,
+                cruisers1_human.posicion,
+                cruisers1_human.hundido
+              ) ||
+              devolverHundido(
+                props.i,
+                props.j,
+                cruisers2_human.posicion,
+                cruisers2_human.hundido
+              ) ||
+              devolverHundido(
+                props.i,
+                props.j,
+                cruisers3_human.posicion,
+                cruisers3_human.hundido
+              ) ||
+              devolverHundido(
+                props.i,
+                props.j,
+                submarine_human.posicion,
+                submarine_human.hundido
+              ) ? (
+                <Fragment>
+                  <div className="grid">
+                    <button className="cells red" disabled></button>
+                  </div>
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <div className="grid">
+                    <button className="cells orange" disabled></button>
+                  </div>
+                </Fragment>
+              )
+            ) : (
+              <Fragment>
+                <div className="grid">
+                  <button
+                    className="cells orange disabled"
+                    onMouseOver={handleHover}
+                    onClick={hadleClick}
+                  ></button>
+                </div>
+              </Fragment>
+            )
+          ) : (
+            <div className="grid">
+              <button className="cells celeste-border " disabled></button>
+            </div>
+          )
+        ) : devolverEsta(props.i, props.j, celdasRandomm) ? (
           <div className="grid">
-            <button
-              className="cells celeste-border"
-              onMouseOver={handleHover}
-              onClick={hadleClick}
-            ></button>
+            <button className="cells purple " disabled></button>
           </div>
         ) : (
           <div className="grid">
-            <button
-              className="cells"
-              onMouseOver={handleHover}
-              onClick={hadleClick}
-            ></button>
+            <button className="cells" disabled></button>
           </div>
         ))}
+
       {props.owner === "cpu" &&
+        PlaygameStarted &&
         (devolverEsta(props.i, props.j, celdaParaPintarComputerr) === true ? (
           devolverEsta(props.i, props.j, celdasImpactadasToCpuu) ? (
             devolverHundido(
@@ -468,13 +639,13 @@ const Cell = (props) => {
             ) ? (
               <Fragment>
                 <div className="grid">
-                  <button className="cells red"></button>
+                  <button className="cells red" disabled></button>
                 </div>
               </Fragment>
             ) : (
               <Fragment>
                 <div className="grid">
-                  <button className="cells orange"></button>
+                  <button className="cells orange" disabled></button>
                 </div>
               </Fragment>
             )
@@ -482,9 +653,10 @@ const Cell = (props) => {
             <Fragment>
               <div className="grid">
                 <button
-                  className="cells celeste"
+                  className="cells celeste "
                   onMouseOver={handleHover}
                   onClick={hadleClick}
+                  disabled
                 ></button>
               </div>
             </Fragment>
