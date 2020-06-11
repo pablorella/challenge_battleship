@@ -26,9 +26,7 @@ import { LAST_IMPACT } from "../types";
 import { ADD_SELECTION_CPU } from "../types";
 import { ADD_CELL_RANDOM } from "../types";
 
-//cada reducer tiene su propio state
 const initialState = {
-  //aca te tienes que poner a pensar que propiedades tiene que tener el state de productos es igual que cuando usamos useState
   activarGrilla: false,
   user: "",
   celdasOcupadas: [],
@@ -118,16 +116,6 @@ const initialState = {
     "cruisers3",
     "submarine",
   ],
-
-  /* barcosDisponibles: [
-    "barcode4",
-    "barcode3_1",
-    "barcode3_2",
-    "barcode3_3",
-    "barcode2",
-  ],
-  error: null,
-  loading: false, */
 };
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -274,7 +262,7 @@ export default function (state = initialState, action) {
     case IMPACT_CARRIER_CPU:
       return {
         ...state,
-        /* carrier: [...state, (state.posicion = 1], */
+
         carrier_cpu: {
           ...state.carrier_cpu,
           impactos: state.carrier_cpu.impactos + 1,
@@ -284,11 +272,11 @@ export default function (state = initialState, action) {
           action.payload.celdas
         ),
       };
-    //----------------------------------//---------//---
+
     case IMPACT_CRUISERS1_CPU:
       return {
         ...state,
-        /* carrier: [...state, (state.posicion = 1], */
+
         cruisers1_cpu: {
           ...state.cruisers1_cpu,
           impactos: state.cruisers1_cpu.impactos + 1,
@@ -301,7 +289,7 @@ export default function (state = initialState, action) {
     case IMPACT_CRUISERS2_CPU:
       return {
         ...state,
-        /* carrier: [...state, (state.posicion = 1], */
+
         cruisers2_cpu: {
           ...state.cruisers2_cpu,
           impactos: state.cruisers2_cpu.impactos + 1,
@@ -314,7 +302,7 @@ export default function (state = initialState, action) {
     case IMPACT_CRUISERS3_CPU:
       return {
         ...state,
-        /* carrier: [...state, (state.posicion = 1], */
+
         cruisers3_cpu: {
           ...state.cruisers3_cpu,
           impactos: state.cruisers3_cpu.impactos + 1,
@@ -327,7 +315,7 @@ export default function (state = initialState, action) {
     case IMPACT_SUBMARINE_CPU:
       return {
         ...state,
-        /* carrier: [...state, (state.posicion = 1], */
+
         submarine_cpu: {
           ...state.submarine_cpu,
           impactos: state.submarine_cpu.impactos + 1,
@@ -344,11 +332,11 @@ export default function (state = initialState, action) {
 
         lastImpact: !state.lastImpact,
       };
-    //desp de aca agregue
+
     case IMPACT_CARRIER:
       return {
         ...state,
-        /* carrier: [...state, (state.posicion = 1], */
+
         carrier: {
           ...state.carrier,
           impactos: state.carrier.impactos + 1,
@@ -358,11 +346,11 @@ export default function (state = initialState, action) {
           action.payload.celdas
         ),
       };
-    //----------------------------------//---------//---
+
     case IMPACT_CRUISERS1:
       return {
         ...state,
-        /* carrier: [...state, (state.posicion = 1], */
+
         cruisers1: {
           ...state.cruisers1,
           impactos: state.cruisers1.impactos + 1,
@@ -375,7 +363,7 @@ export default function (state = initialState, action) {
     case IMPACT_CRUISERS2:
       return {
         ...state,
-        /* carrier: [...state, (state.posicion = 1], */
+
         cruisers2: {
           ...state.cruisers2,
           impactos: state.cruisers2.impactos + 1,
@@ -388,7 +376,7 @@ export default function (state = initialState, action) {
     case IMPACT_CRUISERS3:
       return {
         ...state,
-        /* carrier: [...state, (state.posicion = 1], */
+
         cruisers3: {
           ...state.cruisers3,
           impactos: state.cruisers3.impactos + 1,
@@ -401,7 +389,7 @@ export default function (state = initialState, action) {
     case IMPACT_SUBMARINE:
       return {
         ...state,
-        /* carrier: [...state, (state.posicion = 1], */
+
         submarine: {
           ...state.submarine,
           impactos: state.submarine.impactos + 1,

@@ -26,20 +26,7 @@ import { LAST_IMPACT } from "../types";
 import { ADD_SELECTION_CPU } from "../types";
 import { ADD_CELL_RANDOM } from "../types";
 
-//usar barcos que tenemos
-/* export function eleccionBarcoDeLosDisponibles() {
-  return () => {
-    console.log("desde action");
-  };
-} */
-
 export function habilarGrillaAction(grilla) {
-  /*   return () => {
-    console.log("desde el action");
-    // agregarGrilla();
-    // dispatch( agregarProducto() );
-  }; */
-  //console.log("desde el action" + grilla);
   return (dispatch) => {
     dispatch(cambiarGrilla(grilla));
   };
@@ -50,17 +37,9 @@ const cambiarGrilla = (grilla) => ({
 });
 
 export function agregarPosicionActual(grilla) {
-  /*   return () => {
-    console.log("desde el action");
-    // agregarGrilla();
-    // dispatch( agregarProducto() );
-  }; */
   return (dispatch) => {
     dispatch(cambiarPosicionActual(grilla));
   };
-  /*  return () => {
-    console.log("desde el action", grilla);
-  }; */
 }
 const cambiarPosicionActual = (grilla) => ({
   type: GUARDAR_POSICION_ACTUAL,
@@ -68,31 +47,17 @@ const cambiarPosicionActual = (grilla) => ({
 });
 
 export function agregarCeldasParaPintar(grilla) {
-  /*   return () => {
-    console.log("desde el action");
-    // agregarGrilla();
-    // dispatch( agregarProducto() );
-  }; */
   return (dispatch) => {
     dispatch(addBarcosAPintar(grilla));
   };
-  /*  return () => {
-    console.log("desde el action", grilla);
-  }; */
 }
 const addBarcosAPintar = (grilla) => ({
   type: SAVE_CELL_PAINT,
-  /* payload: [1, 2], */
+
   payload: grilla,
 });
 
 export function handleChangueSense(grilla) {
-  /*   return () => {
-    console.log("desde el action");
-    // agregarGrilla();
-    // dispatch( agregarProducto() );
-  }; */
-  // console.log("desde el action" + grilla);
   return (dispatch) => {
     dispatch(changueSense(grilla));
   };
@@ -102,15 +67,7 @@ const changueSense = (grilla) => ({
   payload: !grilla,
 });
 
-//lo que migre
-
 export function seleccionBarco(grilla) {
-  /*  return () => {
-    console.log("desde el action de grilla");
-    // agregarGrilla();
-    // dispatch( agregarProducto() );
-  }; */
-  //console.log("desde el action" + grilla);
   return (dispatch) => {
     dispatch(seleccionarBarco(grilla));
   };
@@ -121,39 +78,23 @@ const seleccionarBarco = (grilla) => ({
 });
 
 export function deleteListedBoat(grilla) {
-  /*   return () => {
-      console.log("desde el action");
-      // agregarbarco();
-      // dispatch( agregarProducto() );
-    }; */
-  //console.log("desde el action CLICK ELMINAR" + grilla);
   return (dispatch) => {
     dispatch(deleteListedBoardd(grilla));
-    //console.log("que hay aca:" + grilla.barcoClick);
 
     switch (grilla.barcoClick) {
       case "carrier":
-        //  console.log("lo que hay en carrier:" + state.barcoClick);
-
         dispatch(asignarBarcoCarrier(grilla));
         break;
       case "cruisers1":
-        //  console.log("lo que hay en carrier:" + state.barcoClick);
         dispatch(asignarBarcoCruisers1(grilla));
         break;
       case "cruisers2":
-        //  console.log("lo que hay en carrier:" + state.barcoClick);
-
         dispatch(asignarBarcoCruisers2(grilla));
         break;
       case "cruisers3":
-        //  console.log("lo que hay en carrier:" + state.barcoClick);
-
         dispatch(asignarBarcoCruisers3(grilla));
         break;
       case "submarine":
-        //  console.log("lo que hay en carrier:" + state.barcoClick);
-
         dispatch(asignarBarcoSubmarine(grilla));
         break;
 
@@ -199,12 +140,6 @@ const iniciarJuego = (grilla) => ({
 });
 
 export function changueTurnToHuman(grilla) {
-  /*  return () => {
-    console.log("desde el action de grilla");
-    // agregarGrilla();
-    // dispatch( agregarProducto() );
-  }; */
-
   return (dispatch) => {
     dispatch(changue(grilla));
   };
@@ -215,113 +150,69 @@ const changue = (grilla) => ({
 });
 
 export function addCellHumanSelection(grilla) {
-  /*   return () => {
-    console.log("desde el action");
-    // agregarGrilla();
-    // dispatch( agregarProducto() );
-  }; */
   return (dispatch) => {
     dispatch(addSelectionHuman(grilla));
   };
-  /*  return () => {
-    console.log("desde el action", grilla);
-  }; */
 }
 const addSelectionHuman = (grilla) => ({
   type: ADD_SELECTION_SHIT_HUMAN,
-  /* payload: [1, 2], */
+
   payload: grilla,
 });
 
 export function addCellCpuSelection(grilla) {
-  /*   return () => {
-    console.log("desde el action");
-    // agregarGrilla();
-    // dispatch( agregarProducto() );
-  }; */
   return (dispatch) => {
     dispatch(addSelectionCpu(grilla));
   };
-  /*  return () => {
-    console.log("desde el action", grilla);
-  }; */
 }
 const addSelectionCpu = (grilla) => ({
   type: ADD_SELECTION_CPU,
-  /* payload: [1, 2], */
+
   payload: grilla,
 });
 
 export function changuecelRandom(grilla) {
-  /*   return () => {
-    console.log("desde el action");
-    // agregarGrilla();
-    // dispatch( agregarProducto() );
-  }; */
   return (dispatch) => {
     dispatch(addRandom(grilla));
   };
-  /*  return () => {
-    console.log("desde el action", grilla);
-  }; */
 }
 const addRandom = (grilla) => ({
   type: ADD_CELL_RANDOM,
-  /* payload: [1, 2], */
+
   payload: grilla,
 });
 
 export function impactsShitss(grilla) {
-  /*   return () => {
-      console.log("desde el action");
-      // agregarbarco();
-      // dispatch( agregarProducto() );
-    }; */
-  //console.log("desde el action CLICK ELMINAR" + grilla);
   return (dispatch) => {
     switch (grilla.nombre) {
       case "carrier_cpu":
-        //
         dispatch(impactCarrier_cpu(grilla));
         break;
       case "cruisers1_cpu":
         dispatch(impactCruisers1_cpu(grilla));
         break;
       case "cruisers2_cpu":
-        //  console.log("lo que hay en carrier:" + state.barcoClick);
-
         dispatch(impactCruisers2_cpu(grilla));
         break;
       case "cruisers3_cpu":
-        //  console.log("lo que hay en carrier:" + state.barcoClick);
-
         dispatch(impactCruisers3_cpu(grilla));
         break;
       case "submarine_cpu":
-        //  console.log("lo que hay en carrier:" + state.barcoClick);
-
         dispatch(impactSubmarine_cpu(grilla));
         break;
       case "carrier":
-        //
         dispatch(impactCarrier(grilla));
         break;
       case "cruisers1":
         dispatch(impactCruisers1(grilla));
         break;
       case "cruisers2":
-        //  console.log("lo que hay en carrier:" + state.barcoClick);
-
         dispatch(impactCruisers2(grilla));
         break;
       case "cruisers3":
-        //  console.log("lo que hay en carrier:" + state.barcoClick);
-
         dispatch(impactCruisers3(grilla));
         break;
       case "submarine":
-        //  console.log("lo que hay en carrier:" + state.barcoClick);
-
         dispatch(impactSubmarine(grilla));
         break;
       default:
@@ -372,20 +263,12 @@ const impactSubmarine_cpu = (grilla) => ({
   payload: grilla,
 });
 export function changueLastImpact(grilla) {
-  /*   return () => {
-    console.log("desde el action");
-    // agregarGrilla();
-    // dispatch( agregarProducto() );
-  }; */
   return (dispatch) => {
     dispatch(changueLast(grilla));
   };
-  /*  return () => {
-    console.log("desde el action", grilla);
-  }; */
 }
 const changueLast = (grilla) => ({
   type: LAST_IMPACT,
-  /* payload: [1, 2], */
+
   payload: grilla,
 });

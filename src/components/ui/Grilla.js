@@ -21,7 +21,6 @@ const Grilla = ({ owner }) => {
           row.map((col, j) => <Cell owner={owner} i={i} j={j} />)
         )}
       </div>
-      {/* {console.log("desde la grilla" + owner)} */}
     </Fragment>
   );
 };

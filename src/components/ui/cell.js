@@ -1,101 +1,69 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // Actions de Redux
 import { agregarPosicionActual } from "../../actions/grillaActions";
 import { agregarCeldasParaPintar } from "../../actions/grillaActions";
 import { deleteListedBoat } from "../../actions/grillaActions";
-import { changueTurnToHuman } from "../../actions/grillaActions";
 import { addCellHumanSelection } from "../../actions/grillaActions";
 import { impactsShitss } from "../../actions/grillaActions";
-import { changueLastImpact } from "../../actions/grillaActions";
-import { addCellCpuSelection } from "../../actions/grillaActions";
 import { changuecelRandom } from "../../actions/grillaActions";
 
 const Cell = (props) => {
-  //console.log(props.i);
-  // utilizar use dispatch y te crea una función
-  const dispatch = useDispatch();
-  const cambiarPosActual = (grilla) => dispatch(agregarPosicionActual(grilla));
-  const [celdasSeleccionadas, setCeldas] = useState("");
-  const agregarCeldasPintar = (grilla) =>
-    dispatch(agregarCeldasParaPintar(grilla));
-  const deleteListedBoatt = (grilla) => dispatch(deleteListedBoat(grilla));
-  const impactsShits = (grilla) => dispatch(impactsShitss(grilla));
-
-  const addSelectCpu = (grilla) => dispatch(addCellCpuSelection(grilla));
-
-  const addCellHumanSelect = (grilla) =>
-    dispatch(addCellHumanSelection(grilla));
-
-  const cellsDisponiblesParaRand = useSelector(
-    (state) => state.grilla.cellsDisponiblesParaRandom
-  );
+  //UseSelectors
   const PlaygameStarted = useSelector((state) => state.grilla.gameStarted);
   const barcoClick = useSelector((state) => state.grilla.barcoClick);
   const celdaParaPintar = useSelector((state) => state.grilla.celdaParaPintar);
   const senseHorizontal = useSelector((state) => state.grilla.senseHorizontal);
-
-  const addCellRandom = (grilla) => dispatch(changuecelRandom(grilla));
   const carrier_cpuu = useSelector((state) => state.grilla.carrier_cpu);
   const cruisers1_cpuu = useSelector((state) => state.grilla.cruisers1_cpu);
   const cruisers2_cpuu = useSelector((state) => state.grilla.cruisers2_cpu);
   const cruisers3_cpuu = useSelector((state) => state.grilla.cruisers3_cpu);
   const submarine_cpuu = useSelector((state) => state.grilla.submarine_cpu);
-
+  const celdasRandomm = useSelector((state) => state.grilla.celdasRandom);
   const carrier_human = useSelector((state) => state.grilla.carrier);
   const cruisers1_human = useSelector((state) => state.grilla.cruisers1);
   const cruisers2_human = useSelector((state) => state.grilla.cruisers2);
   const cruisers3_human = useSelector((state) => state.grilla.cruisers3);
   const submarine_human = useSelector((state) => state.grilla.submarine);
   const turnHumann = useSelector((state) => state.grilla.turnHuman);
-
-  const changueLastImpactt = (grilla) => dispatch(changueLastImpact(grilla));
-
-  const changueTurnToHumannn = (grilla) => dispatch(changueTurnToHuman(grilla));
-  const lastImpactt = useSelector((state) => state.grilla.lastImpact);
   const celdasOcupadas = useSelector((state) => state.grilla.celdasOcupadas);
+  //Dispatchs
+  const dispatch = useDispatch();
+  const cambiarPosActual = (grilla) => dispatch(agregarPosicionActual(grilla));
+
+  const agregarCeldasPintar = (grilla) =>
+    dispatch(agregarCeldasParaPintar(grilla));
+  const deleteListedBoatt = (grilla) => dispatch(deleteListedBoat(grilla));
+  const impactsShits = (grilla) => dispatch(impactsShitss(grilla));
+  const addCellHumanSelect = (grilla) =>
+    dispatch(addCellHumanSelection(grilla));
+  const cellsDisponiblesParaRand = useSelector(
+    (state) => state.grilla.cellsDisponiblesParaRandom
+  );
   const celdaParaPintarComputerr = useSelector(
     (state) => state.grilla.celdaParaPintarComputer
   );
-
-  const celdasRandomm = useSelector((state) => state.grilla.celdasRandom);
+  const addCellRandom = (grilla) => dispatch(changuecelRandom(grilla));
   const celdasImpactadasToCpuu = useSelector(
     (state) => state.grilla.celdasImpactadasToCpu
   );
-
   const celdasImpactadasToHumann = useSelector(
     (state) => state.grilla.celdasImpactadasToHuman
   );
 
   const hadleClick = (e) => {
-    /* console.log(
-      "turnHuman: " + turnHumann,
-      "PlaygameStarted: " + PlaygameStarted
-    ); */
-
     e.preventDefault();
-    // console.log("celdas_cpu:" + celdasImpactadasToCpuu);
-    //console.log("Coordenadas: I:" + props.i + "j:" + props.j);
-    if (turnHumann && !PlaygameStarted) {
-      //tiene q borrar el barco de la lista para no volverlo a elegir
 
-      /*const json = carrier;
-      json["posicion"] = celdaParaPintar;
-      
-      console.log("json_carrier:" + json["posicion"]); */
+    if (turnHumann && !PlaygameStarted) {
       if (barcoClick !== "") {
-        deleteListedBoatt({ barcoClick, celdaParaPintar });
+        if (celdaParaPintar.length > 1) {
+          deleteListedBoatt({ barcoClick, celdaParaPintar });
+        }
       }
     }
     if (turnHumann && PlaygameStarted) {
-      // changueTurnToHumannn(turnHumann);
-
-      /*  if (lastImpactt) {
-          changueLastImpactt();
-        } */
       addCellHumanSelect([[props.i, props.j]]);
-      //  changueTurnToHumannn(false);
-      //if (props.i === 0 && props.j === 1) {
+
       if (devolverEsta(props.i, props.j, carrier_cpuu.posicion)) {
         if (carrier_cpuu.impactos === 3) {
           impactsShits({
@@ -110,8 +78,6 @@ const Cell = (props) => {
             hundido: false,
           });
         }
-        //de la cpu impactsShits({ nombre: "carrier_cpu", celdas: [[props.i, props.j]] });
-        // changueLastImpactt();
       }
       if (devolverEsta(props.i, props.j, cruisers1_cpuu.posicion)) {
         if (cruisers1_cpuu.impactos === 2) {
@@ -174,24 +140,17 @@ const Cell = (props) => {
         }
       }
 
-      // changueTurnToHumannn(turnHumann);
-
-      /*  if (lastImpactt) {
-          changueLastImpactt();
-        } */
       function randomInt(min, max) {
         return min + Math.floor((max - min) * Math.random());
       }
-      // console.log([[randomInt(0, 9), randomInt(0, 9)]]);
+     
 
       let eleccion = randomInt(0, cellsDisponiblesParaRand.length);
       let i = cellsDisponiblesParaRand[eleccion][0];
       let j = cellsDisponiblesParaRand[eleccion][1];
 
       addCellRandom([[i, j]]);
-      // addSelectCpu;([[i, j]]);
-      //changueTurnToHumannn();
-      //if (props.i === 0 && props.j === 1) {
+     
       if (devolverEsta(i, j, carrier_human.posicion)) {
         if (carrier_human.impactos === 3) {
           impactsShits({
@@ -206,8 +165,6 @@ const Cell = (props) => {
             hundido: false,
           });
         }
-        //de la cpu impactsShits({ nombre: "carrier", celdas: [[i, j]] });
-        // changueLastImpactt();
       }
       if (devolverEsta(i, j, cruisers1_human.posicion)) {
         if (cruisers1_human.impactos === 2) {
@@ -273,21 +230,13 @@ const Cell = (props) => {
   };
 
   const handleHover = (e) => {
-    //console.log("Coordenadas: I:" + props.i + "j:" + props.j);
-    //e.target.style.background = "#40bfbb;";
-    //console.log(e.MouseEvent.clientX );
     if (!PlaygameStarted) {
       if (barcoClick !== "") {
-        //console.log("barco click" + barcoClick);
-
         cambiarPosActual({ posicion: [props.i, props.j] });
         switch (barcoClick) {
           case "carrier":
-            //console.log("es carrier"); es de 4 espacios
-            //  console.log("fuera" + props.j);
             if (senseHorizontal) {
               if (props.j < 7) {
-                //  console.log("dentro" + props.j);
                 agregarCeldasPintarPavlin([
                   [props.i, props.j],
                   [props.i, props.j + 1],
@@ -299,7 +248,6 @@ const Cell = (props) => {
               }
             } else {
               if (props.i < 7) {
-                //  console.log("dentro" + props.j);
                 agregarCeldasPintarPavlin([
                   [props.i, props.j],
                   [props.i + 1, props.j],
@@ -313,17 +261,8 @@ const Cell = (props) => {
 
             break;
           case "cruisers1":
-            //console.log("es carrier"); es de 4 espacios
-            //  console.log("fuera" + props.j);
-            /* console.log(
-            "i:" + props.i,
-            "j:" + props.j,
-            "celdas:" + celdasOcupadas
-          ); */
-
             if (senseHorizontal) {
               if (props.j < 8) {
-                //  console.log("dentro" + props.j);
                 agregarCeldasPintarPavlin([
                   [props.i, props.j],
                   [props.i, props.j + 1],
@@ -334,7 +273,6 @@ const Cell = (props) => {
               }
             } else {
               if (props.i < 8) {
-                //  console.log("dentro" + props.j);
                 agregarCeldasPintarPavlin([
                   [props.i, props.j],
                   [props.i + 1, props.j],
@@ -347,12 +285,8 @@ const Cell = (props) => {
 
             break;
           case "cruisers2":
-            //console.log("es carrier"); es de 4 espacios
-            //  console.log("fuera" + props.j);
-
             if (senseHorizontal) {
               if (props.j < 8) {
-                //  console.log("dentro" + props.j);
                 agregarCeldasPintarPavlin([
                   [props.i, props.j],
                   [props.i, props.j + 1],
@@ -363,7 +297,6 @@ const Cell = (props) => {
               }
             } else {
               if (props.i < 8) {
-                //  console.log("dentro" + props.j);
                 agregarCeldasPintarPavlin([
                   [props.i, props.j],
                   [props.i + 1, props.j],
@@ -392,7 +325,6 @@ const Cell = (props) => {
                 }
               } else {
                 if (props.i < 8) {
-                  //  console.log("dentro" + props.j);
                   agregarCeldasPintarPavlin([
                     [props.i, props.j],
                     [props.i + 1, props.j],
@@ -405,12 +337,9 @@ const Cell = (props) => {
             }
             break;
           case "submarine":
-            //console.log("es carrier"); es de 4 espacios
-            //  console.log("fuera" + props.j);
             if (!showShip(props.i, props.j, celdasOcupadas)) {
               if (senseHorizontal) {
                 if (props.j < 9) {
-                  //  console.log("dentro" + props.j);
                   agregarCeldasPintarPavlin([
                     [props.i, props.j],
                     [props.i, props.j + 1],
@@ -420,7 +349,6 @@ const Cell = (props) => {
                 }
               } else {
                 if (props.i < 9) {
-                  //  console.log("dentro" + props.j);
                   agregarCeldasPintarPavlin([
                     [props.i, props.j],
                     [props.i + 1, props.j],
@@ -442,8 +370,6 @@ const Cell = (props) => {
     let encontro = false;
     celdas.forEach((element) => {
       if (i === element[0] && j === element[1]) {
-        //console.log("encontre uno");
-
         encontro = true;
       }
     });
@@ -456,8 +382,6 @@ const Cell = (props) => {
     let encontro = false;
     celdas.forEach((element) => {
       if (i === element[0] && j === element[1]) {
-        //console.log("encontre uno");
-
         encontro = true;
       }
     });
@@ -470,8 +394,6 @@ const Cell = (props) => {
     let encontro = false;
     celdasOcupadas.forEach((element) => {
       if (i === element[0] && j === element[1]) {
-        //console.log("encontre uno");
-
         encontro = true;
       }
     });
@@ -501,15 +423,6 @@ const Cell = (props) => {
 
   return (
     <Fragment>
-      {/* {console.log("[" + props.i + "," + props.j + "]")} */}
-      {/*     {console.log("desde el componente" + props.i + "," + props.j)}
-      {console.log("desde cedldapara pintar:" + celdaParaPintar[0][0])}
-      {console.log(celdaParaPintar.includes(props.i + "," + props.j))}
- */}
-      {/*  {celdaParaPintar.map((item) =>
-        console.log("Ejex" + item[0] + "Eje y:" + item[1])
-      )} */}
-      {/* {console.log(devolverEsta(props.i, props.j, celdaParaPintar))} */}
       {props.owner === "human" &&
         !PlaygameStarted &&
         (devolverEsta(props.i, props.j, celdaParaPintar) === true ||
@@ -670,24 +583,6 @@ const Cell = (props) => {
             ></button>
           </div>
         ))}
-
-      {/*  {props.i === 1 ? (
-        <div className="grid">
-          <button
-            className="cells celeste"
-            onMouseOver={handleHover}
-            onClick={hadleClick}
-          ></button>
-        </div>
-      ) : (
-        <div className="grid">
-          <button
-            className="cells"
-            onMouseOver={handleHover}
-            onClick={hadleClick}
-          ></button>
-        </div>
-      )} */}
     </Fragment>
   );
 };
