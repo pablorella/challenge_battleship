@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import Cell from "./cell.js";
-const Grilla = ({ owner }) => {
-  const matriz = [
+const Grid = ({ owner }) => {
+  const matrix = [
     [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
     [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
     [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
@@ -17,7 +17,7 @@ const Grilla = ({ owner }) => {
   return (
     <Fragment>
       <div className="grid">
-        {matriz.map((row, i) =>
+        {matrix.map((row, i) =>
           row.map((col, j) => <Cell owner={owner} i={i} j={j} />)
         )}
       </div>
@@ -25,4 +25,4 @@ const Grilla = ({ owner }) => {
   );
 };
 
-export default Grilla;
+export default Grid;

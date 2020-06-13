@@ -1,8 +1,6 @@
 import { combineReducers } from "redux";
-import grillaReducer from "./grillaReducer";
-//import barcoReducer from "./barcoReducer";
+import gridReducer from "./gridReducer";
 
 export default combineReducers({
-  grilla: grillaReducer,
-  // barco: barcoReducer,
+  grid: gridReducer,
 });

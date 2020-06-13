@@ -1,141 +1,138 @@
 import React, { Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // Actions de Redux
-import { agregarPosicionActual } from "../../actions/grillaActions";
-import { agregarCeldasParaPintar } from "../../actions/grillaActions";
-import { deleteListedBoat } from "../../actions/grillaActions";
-import { addCellHumanSelection } from "../../actions/grillaActions";
-import { impactsShitss } from "../../actions/grillaActions";
-import { changuecelRandom } from "../../actions/grillaActions";
+
+import { addCellsToPaint } from "../../actions/gridActions";
+import { deleteListedBoat } from "../../actions/gridActions";
+import { addCellHumanSelection } from "../../actions/gridActions";
+import { impactsShitss } from "../../actions/gridActions";
+import { changuecelRandom } from "../../actions/gridActions";
 
 const Cell = (props) => {
   //UseSelectors
-  const PlaygameStarted = useSelector((state) => state.grilla.gameStarted);
-  const barcoClick = useSelector((state) => state.grilla.barcoClick);
-  const celdaParaPintar = useSelector((state) => state.grilla.celdaParaPintar);
-  const senseHorizontal = useSelector((state) => state.grilla.senseHorizontal);
-  const carrier_cpuu = useSelector((state) => state.grilla.carrier_cpu);
-  const cruisers1_cpuu = useSelector((state) => state.grilla.cruisers1_cpu);
-  const cruisers2_cpuu = useSelector((state) => state.grilla.cruisers2_cpu);
-  const cruisers3_cpuu = useSelector((state) => state.grilla.cruisers3_cpu);
-  const submarine_cpuu = useSelector((state) => state.grilla.submarine_cpu);
-  const celdasRandomm = useSelector((state) => state.grilla.celdasRandom);
-  const carrier_human = useSelector((state) => state.grilla.carrier);
-  const cruisers1_human = useSelector((state) => state.grilla.cruisers1);
-  const cruisers2_human = useSelector((state) => state.grilla.cruisers2);
-  const cruisers3_human = useSelector((state) => state.grilla.cruisers3);
-  const submarine_human = useSelector((state) => state.grilla.submarine);
-  const turnHumann = useSelector((state) => state.grilla.turnHuman);
-  const celdasOcupadas = useSelector((state) => state.grilla.celdasOcupadas);
+  const PlaygameStarted = useSelector((state) => state.grid.gameStarted);
+  const SelectShipClick = useSelector((state) => state.grid.shipClick);
+  const cellToPaintt = useSelector((state) => state.grid.cellToPaint);
+  const senseHorizontal = useSelector((state) => state.grid.senseHorizontal);
+  const carrier_cpuu = useSelector((state) => state.grid.carrier_cpu);
+  const cruisers1_cpuu = useSelector((state) => state.grid.cruisers1_cpu);
+  const cruisers2_cpuu = useSelector((state) => state.grid.cruisers2_cpu);
+  const cruisers3_cpuu = useSelector((state) => state.grid.cruisers3_cpu);
+  const submarine_cpuu = useSelector((state) => state.grid.submarine_cpu);
+  const cellRandomm = useSelector((state) => state.grid.cellRandom);
+  const carrier_human = useSelector((state) => state.grid.carrier);
+  const cruisers1_human = useSelector((state) => state.grid.cruisers1);
+  const cruisers2_human = useSelector((state) => state.grid.cruisers2);
+  const cruisers3_human = useSelector((state) => state.grid.cruisers3);
+  const submarine_human = useSelector((state) => state.grid.submarine);
+  const turnHumann = useSelector((state) => state.grid.turnHuman);
+  const changueOccupiedCells = useSelector((state) => state.grid.occupiedCells);
   //Dispatchs
   const dispatch = useDispatch();
-  const cambiarPosActual = (grilla) => dispatch(agregarPosicionActual(grilla));
 
-  const agregarCeldasPintar = (grilla) =>
-    dispatch(agregarCeldasParaPintar(grilla));
-  const deleteListedBoatt = (grilla) => dispatch(deleteListedBoat(grilla));
-  const impactsShits = (grilla) => dispatch(impactsShitss(grilla));
-  const addCellHumanSelect = (grilla) =>
-    dispatch(addCellHumanSelection(grilla));
-  const cellsDisponiblesParaRand = useSelector(
-    (state) => state.grilla.cellsDisponiblesParaRandom
+  const addCellsToPaintt = (grid) => dispatch(addCellsToPaint(grid));
+  const deleteListedBoatt = (grid) => dispatch(deleteListedBoat(grid));
+  const impactsShits = (grid) => dispatch(impactsShitss(grid));
+  const addCellHumanSelect = (grid) => dispatch(addCellHumanSelection(grid));
+  const cellsAvailableForRand = useSelector(
+    (state) => state.grid.cellsAvailableForRandom
   );
-  const celdaParaPintarComputerr = useSelector(
-    (state) => state.grilla.celdaParaPintarComputer
+  const cellToPaintComputerr = useSelector(
+    (state) => state.grid.cellToPaintComputer
   );
-  const addCellRandom = (grilla) => dispatch(changuecelRandom(grilla));
-  const celdasImpactadasToCpuu = useSelector(
-    (state) => state.grilla.celdasImpactadasToCpu
+  const addCellRandom = (grid) => dispatch(changuecelRandom(grid));
+  const cellsImpactedByCpuu = useSelector(
+    (state) => state.grid.cellsImpactedByCpu
   );
-  const celdasImpactadasToHumann = useSelector(
-    (state) => state.grilla.celdasImpactadasToHuman
+  const humanImpactedCellss = useSelector(
+    (state) => state.grid.humanImpactedCells
   );
 
   const hadleClick = (e) => {
     e.preventDefault();
 
     if (turnHumann && !PlaygameStarted) {
-      if (barcoClick !== "") {
-        if (celdaParaPintar.length > 1) {
-          deleteListedBoatt({ barcoClick, celdaParaPintar });
+      if (SelectShipClick !== "") {
+        if (cellToPaintt.length > 1) {
+          deleteListedBoatt({ SelectShipClick, cellToPaintt });
         }
       }
     }
     if (turnHumann && PlaygameStarted) {
       addCellHumanSelect([[props.i, props.j]]);
 
-      if (devolverEsta(props.i, props.j, carrier_cpuu.posicion)) {
-        if (carrier_cpuu.impactos === 3) {
+      if (walkAndSearch(props.i, props.j, carrier_cpuu.position)) {
+        if (carrier_cpuu.impacts === 3) {
           impactsShits({
-            nombre: "carrier_cpu",
-            celdas: [[props.i, props.j]],
-            hundido: true,
+            name: "carrier_cpu",
+            cells: [[props.i, props.j]],
+            sunken: true,
           });
         } else {
           impactsShits({
-            nombre: "carrier_cpu",
-            celdas: [[props.i, props.j]],
-            hundido: false,
+            name: "carrier_cpu",
+            cells: [[props.i, props.j]],
+            sunken: false,
           });
         }
       }
-      if (devolverEsta(props.i, props.j, cruisers1_cpuu.posicion)) {
-        if (cruisers1_cpuu.impactos === 2) {
+      if (walkAndSearch(props.i, props.j, cruisers1_cpuu.position)) {
+        if (cruisers1_cpuu.impacts === 2) {
           impactsShits({
-            nombre: "cruisers1_cpu",
-            celdas: [[props.i, props.j]],
-            hundido: true,
+            name: "cruisers1_cpu",
+            cells: [[props.i, props.j]],
+            sunken: true,
           });
         } else {
           impactsShits({
-            nombre: "cruisers1_cpu",
-            celdas: [[props.i, props.j]],
-            hundido: false,
+            name: "cruisers1_cpu",
+            cells: [[props.i, props.j]],
+            sunken: false,
           });
         }
       }
-      if (devolverEsta(props.i, props.j, cruisers2_cpuu.posicion)) {
-        if (cruisers2_cpuu.impactos === 2) {
+      if (walkAndSearch(props.i, props.j, cruisers2_cpuu.position)) {
+        if (cruisers2_cpuu.impacts === 2) {
           impactsShits({
-            nombre: "cruisers2_cpu",
-            celdas: [[props.i, props.j]],
-            hundido: true,
+            name: "cruisers2_cpu",
+            cells: [[props.i, props.j]],
+            sunken: true,
           });
         } else {
           impactsShits({
-            nombre: "cruisers2_cpu",
-            celdas: [[props.i, props.j]],
-            hundido: false,
+            name: "cruisers2_cpu",
+            cells: [[props.i, props.j]],
+            sunken: false,
           });
         }
       }
-      if (devolverEsta(props.i, props.j, cruisers3_cpuu.posicion)) {
-        if (cruisers3_cpuu.impactos === 2) {
+      if (walkAndSearch(props.i, props.j, cruisers3_cpuu.position)) {
+        if (cruisers3_cpuu.impacts === 2) {
           impactsShits({
-            nombre: "cruisers3_cpu",
-            celdas: [[props.i, props.j]],
-            hundido: true,
+            name: "cruisers3_cpu",
+            cells: [[props.i, props.j]],
+            sunken: true,
           });
         } else {
           impactsShits({
-            nombre: "cruisers3_cpu",
-            celdas: [[props.i, props.j]],
-            hundido: false,
+            name: "cruisers3_cpu",
+            cells: [[props.i, props.j]],
+            sunken: false,
           });
         }
       }
-      if (devolverEsta(props.i, props.j, submarine_cpuu.posicion)) {
-        if (submarine_cpuu.impactos === 1) {
+      if (walkAndSearch(props.i, props.j, submarine_cpuu.position)) {
+        if (submarine_cpuu.impacts === 1) {
           impactsShits({
-            nombre: "submarine_cpu",
-            celdas: [[props.i, props.j]],
-            hundido: true,
+            name: "submarine_cpu",
+            cells: [[props.i, props.j]],
+            sunken: true,
           });
         } else {
           impactsShits({
-            nombre: "submarine_cpu",
-            celdas: [[props.i, props.j]],
-            hundido: false,
+            name: "submarine_cpu",
+            cells: [[props.i, props.j]],
+            sunken: false,
           });
         }
       }
@@ -143,86 +140,85 @@ const Cell = (props) => {
       function randomInt(min, max) {
         return min + Math.floor((max - min) * Math.random());
       }
-     
 
-      let eleccion = randomInt(0, cellsDisponiblesParaRand.length);
-      let i = cellsDisponiblesParaRand[eleccion][0];
-      let j = cellsDisponiblesParaRand[eleccion][1];
+      let eleccion = randomInt(0, cellsAvailableForRand.length);
+      let i = cellsAvailableForRand[eleccion][0];
+      let j = cellsAvailableForRand[eleccion][1];
 
       addCellRandom([[i, j]]);
-     
-      if (devolverEsta(i, j, carrier_human.posicion)) {
-        if (carrier_human.impactos === 3) {
+
+      if (walkAndSearch(i, j, carrier_human.position)) {
+        if (carrier_human.impacts === 3) {
           impactsShits({
-            nombre: "carrier",
-            celdas: [[i, j]],
-            hundido: true,
+            name: "carrier",
+            cells: [[i, j]],
+            sunken: true,
           });
         } else {
           impactsShits({
-            nombre: "carrier",
-            celdas: [[i, j]],
-            hundido: false,
+            name: "carrier",
+            cells: [[i, j]],
+            sunken: false,
           });
         }
       }
-      if (devolverEsta(i, j, cruisers1_human.posicion)) {
-        if (cruisers1_human.impactos === 2) {
+      if (walkAndSearch(i, j, cruisers1_human.position)) {
+        if (cruisers1_human.impacts === 2) {
           impactsShits({
-            nombre: "cruisers1",
-            celdas: [[i, j]],
-            hundido: true,
+            name: "cruisers1",
+            cells: [[i, j]],
+            sunken: true,
           });
         } else {
           impactsShits({
-            nombre: "cruisers1",
-            celdas: [[i, j]],
-            hundido: false,
+            name: "cruisers1",
+            cells: [[i, j]],
+            sunken: false,
           });
         }
       }
-      if (devolverEsta(i, j, cruisers2_human.posicion)) {
-        if (cruisers2_human.impactos === 2) {
+      if (walkAndSearch(i, j, cruisers2_human.position)) {
+        if (cruisers2_human.impacts === 2) {
           impactsShits({
-            nombre: "cruisers2",
-            celdas: [[i, j]],
-            hundido: true,
+            name: "cruisers2",
+            cells: [[i, j]],
+            sunken: true,
           });
         } else {
           impactsShits({
-            nombre: "cruisers2",
-            celdas: [[i, j]],
-            hundido: false,
+            name: "cruisers2",
+            cells: [[i, j]],
+            sunken: false,
           });
         }
       }
-      if (devolverEsta(i, j, cruisers3_human.posicion)) {
-        if (cruisers3_human.impactos === 2) {
+      if (walkAndSearch(i, j, cruisers3_human.position)) {
+        if (cruisers3_human.impacts === 2) {
           impactsShits({
-            nombre: "cruisers3",
-            celdas: [[i, j]],
-            hundido: true,
+            name: "cruisers3",
+            cells: [[i, j]],
+            sunken: true,
           });
         } else {
           impactsShits({
-            nombre: "cruisers3",
-            celdas: [[i, j]],
-            hundido: false,
+            name: "cruisers3",
+            cells: [[i, j]],
+            sunken: false,
           });
         }
       }
-      if (devolverEsta(i, j, submarine_human.posicion)) {
-        if (submarine_human.impactos === 1) {
+      if (walkAndSearch(i, j, submarine_human.position)) {
+        if (submarine_human.impacts === 1) {
           impactsShits({
-            nombre: "submarine",
-            celdas: [[i, j]],
-            hundido: true,
+            name: "submarine",
+            cells: [[i, j]],
+            sunken: true,
           });
         } else {
           impactsShits({
-            nombre: "submarine",
-            celdas: [[i, j]],
-            hundido: false,
+            name: "submarine",
+            cells: [[i, j]],
+            sunken: false,
           });
         }
       }
@@ -231,31 +227,30 @@ const Cell = (props) => {
 
   const handleHover = (e) => {
     if (!PlaygameStarted) {
-      if (barcoClick !== "") {
-        cambiarPosActual({ posicion: [props.i, props.j] });
-        switch (barcoClick) {
+      if (SelectShipClick !== "") {
+        switch (SelectShipClick) {
           case "carrier":
             if (senseHorizontal) {
               if (props.j < 7) {
-                agregarCeldasPintarPavlin([
+                addCellsToPaintAux([
                   [props.i, props.j],
                   [props.i, props.j + 1],
                   [props.i, props.j + 2],
                   [props.i, props.j + 3],
                 ]);
               } else {
-                agregarCeldasPintar([[]]);
+                addCellsToPaintt([[]]);
               }
             } else {
               if (props.i < 7) {
-                agregarCeldasPintarPavlin([
+                addCellsToPaintAux([
                   [props.i, props.j],
                   [props.i + 1, props.j],
                   [props.i + 2, props.j],
                   [props.i + 3, props.j],
                 ]);
               } else {
-                agregarCeldasPintar([[]]);
+                addCellsToPaintt([[]]);
               }
             }
 
@@ -263,23 +258,23 @@ const Cell = (props) => {
           case "cruisers1":
             if (senseHorizontal) {
               if (props.j < 8) {
-                agregarCeldasPintarPavlin([
+                addCellsToPaintAux([
                   [props.i, props.j],
                   [props.i, props.j + 1],
                   [props.i, props.j + 2],
                 ]);
               } else {
-                agregarCeldasPintar([[]]);
+                addCellsToPaintt([[]]);
               }
             } else {
               if (props.i < 8) {
-                agregarCeldasPintarPavlin([
+                addCellsToPaintAux([
                   [props.i, props.j],
                   [props.i + 1, props.j],
                   [props.i + 2, props.j],
                 ]);
               } else {
-                agregarCeldasPintar([[]]);
+                addCellsToPaintt([[]]);
               }
             }
 
@@ -287,23 +282,23 @@ const Cell = (props) => {
           case "cruisers2":
             if (senseHorizontal) {
               if (props.j < 8) {
-                agregarCeldasPintarPavlin([
+                addCellsToPaintAux([
                   [props.i, props.j],
                   [props.i, props.j + 1],
                   [props.i, props.j + 2],
                 ]);
               } else {
-                agregarCeldasPintar([[]]);
+                addCellsToPaintt([[]]);
               }
             } else {
               if (props.i < 8) {
-                agregarCeldasPintarPavlin([
+                addCellsToPaintAux([
                   [props.i, props.j],
                   [props.i + 1, props.j],
                   [props.i + 2, props.j],
                 ]);
               } else {
-                agregarCeldasPintar([[]]);
+                addCellsToPaintt([[]]);
               }
             }
 
@@ -311,50 +306,50 @@ const Cell = (props) => {
           case "cruisers3":
             //console.log("es carrier"); es de 4 espacios
             //  console.log("fuera" + props.j);
-            if (!showShip(props.i, props.j, celdasOcupadas)) {
+            if (!showShip(props.i, props.j, changueOccupiedCells)) {
               if (senseHorizontal) {
                 if (props.j < 8) {
                   //  console.log("dentro" + props.j);
-                  agregarCeldasPintarPavlin([
+                  addCellsToPaintAux([
                     [props.i, props.j],
                     [props.i, props.j + 1],
                     [props.i, props.j + 2],
                   ]);
                 } else {
-                  agregarCeldasPintar([[]]);
+                  addCellsToPaintt([[]]);
                 }
               } else {
                 if (props.i < 8) {
-                  agregarCeldasPintarPavlin([
+                  addCellsToPaintAux([
                     [props.i, props.j],
                     [props.i + 1, props.j],
                     [props.i + 2, props.j],
                   ]);
                 } else {
-                  agregarCeldasPintar([[]]);
+                  addCellsToPaintt([[]]);
                 }
               }
             }
             break;
           case "submarine":
-            if (!showShip(props.i, props.j, celdasOcupadas)) {
+            if (!showShip(props.i, props.j, changueOccupiedCells)) {
               if (senseHorizontal) {
                 if (props.j < 9) {
-                  agregarCeldasPintarPavlin([
+                  addCellsToPaintAux([
                     [props.i, props.j],
                     [props.i, props.j + 1],
                   ]);
                 } else {
-                  agregarCeldasPintar([[]]);
+                  addCellsToPaintt([[]]);
                 }
               } else {
                 if (props.i < 9) {
-                  agregarCeldasPintarPavlin([
+                  addCellsToPaintAux([
                     [props.i, props.j],
                     [props.i + 1, props.j],
                   ]);
                 } else {
-                  agregarCeldasPintar([[]]);
+                  addCellsToPaintt([[]]);
                 }
               }
             }
@@ -366,58 +361,55 @@ const Cell = (props) => {
     }
   };
 
-  const devolverEsta = (i, j, celdas) => {
-    let encontro = false;
-    celdas.forEach((element) => {
+  const walkAndSearch = (i, j, cells) => {
+    let found = false;
+    cells.forEach((element) => {
       if (i === element[0] && j === element[1]) {
-        encontro = true;
+        found = true;
       }
     });
 
-    if (encontro === true) {
+    if (found === true) {
       return true;
     }
   };
-  const devolverHundido = (i, j, celdas, valor) => {
-    let encontro = false;
-    celdas.forEach((element) => {
+  const devolversunken = (i, j, cells, valor) => {
+    let found = false;
+    cells.forEach((element) => {
       if (i === element[0] && j === element[1]) {
-        encontro = true;
+        found = true;
       }
     });
 
-    if (encontro === true && valor) {
+    if (found === true && valor) {
       return true;
     }
   };
-  const showShip = (i, j, celdasOcupadas) => {
-    let encontro = false;
-    celdasOcupadas.forEach((element) => {
+  const showShip = (i, j, changueOccupiedCells) => {
+    let found = false;
+    changueOccupiedCells.forEach((element) => {
       if (i === element[0] && j === element[1]) {
-        encontro = true;
+        found = true;
       }
     });
 
-    if (encontro === true) {
+    if (found === true) {
       return true;
     }
   };
 
-  const agregarCeldasPintarPavlin = (celdasAOcupar) => {
-    let encontro = false;
-    celdasOcupadas.forEach((element) => {
-      celdasAOcupar.forEach((elementceldas) => {
-        if (
-          element[0] === elementceldas[0] &&
-          elementceldas[1] === element[1]
-        ) {
-          encontro = true;
+  const addCellsToPaintAux = (cellsToOccupy) => {
+    let found = false;
+    changueOccupiedCells.forEach((element) => {
+      cellsToOccupy.forEach((elementCell) => {
+        if (element[0] === elementCell[0] && elementCell[1] === element[1]) {
+          found = true;
         }
       });
     });
 
-    if (encontro !== true) {
-      agregarCeldasPintar(celdasAOcupar);
+    if (found !== true) {
+      addCellsToPaintt(cellsToOccupy);
     }
   };
 
@@ -425,11 +417,11 @@ const Cell = (props) => {
     <Fragment>
       {props.owner === "human" &&
         !PlaygameStarted &&
-        (devolverEsta(props.i, props.j, celdaParaPintar) === true ||
-        showShip(props.i, props.j, celdasOcupadas) ? (
+        (walkAndSearch(props.i, props.j, cellToPaintt) === true ||
+        showShip(props.i, props.j, changueOccupiedCells) ? (
           <div className="grid">
             <button
-              className="cells celeste"
+              className="cells lightBlue"
               onMouseOver={handleHover}
               onClick={hadleClick}
             ></button>
@@ -445,38 +437,38 @@ const Cell = (props) => {
         ))}
       {props.owner === "human" &&
         PlaygameStarted &&
-        (devolverEsta(props.i, props.j, celdasOcupadas) === true ? (
-          devolverEsta(props.i, props.j, celdasRandomm) === true ? (
-            devolverEsta(props.i, props.j, celdasImpactadasToHumann) ? (
-              devolverHundido(
+        (walkAndSearch(props.i, props.j, changueOccupiedCells) === true ? (
+          walkAndSearch(props.i, props.j, cellRandomm) === true ? (
+            walkAndSearch(props.i, props.j, humanImpactedCellss) ? (
+              devolversunken(
                 props.i,
                 props.j,
-                carrier_human.posicion,
-                carrier_human.hundido
+                carrier_human.position,
+                carrier_human.sunken
               ) ||
-              devolverHundido(
+              devolversunken(
                 props.i,
                 props.j,
-                cruisers1_human.posicion,
-                cruisers1_human.hundido
+                cruisers1_human.position,
+                cruisers1_human.sunken
               ) ||
-              devolverHundido(
+              devolversunken(
                 props.i,
                 props.j,
-                cruisers2_human.posicion,
-                cruisers2_human.hundido
+                cruisers2_human.position,
+                cruisers2_human.sunken
               ) ||
-              devolverHundido(
+              devolversunken(
                 props.i,
                 props.j,
-                cruisers3_human.posicion,
-                cruisers3_human.hundido
+                cruisers3_human.position,
+                cruisers3_human.sunken
               ) ||
-              devolverHundido(
+              devolversunken(
                 props.i,
                 props.j,
-                submarine_human.posicion,
-                submarine_human.hundido
+                submarine_human.position,
+                submarine_human.sunken
               ) ? (
                 <Fragment>
                   <div className="grid">
@@ -503,10 +495,10 @@ const Cell = (props) => {
             )
           ) : (
             <div className="grid">
-              <button className="cells celeste-border " disabled></button>
+              <button className="cells lightBlue-border " disabled></button>
             </div>
           )
-        ) : devolverEsta(props.i, props.j, celdasRandomm) ? (
+        ) : walkAndSearch(props.i, props.j, cellRandomm) ? (
           <div className="grid">
             <button className="cells purple " disabled></button>
           </div>
@@ -518,37 +510,37 @@ const Cell = (props) => {
 
       {props.owner === "cpu" &&
         PlaygameStarted &&
-        (devolverEsta(props.i, props.j, celdaParaPintarComputerr) === true ? (
-          devolverEsta(props.i, props.j, celdasImpactadasToCpuu) ? (
-            devolverHundido(
+        (walkAndSearch(props.i, props.j, cellToPaintComputerr) === true ? (
+          walkAndSearch(props.i, props.j, cellsImpactedByCpuu) ? (
+            devolversunken(
               props.i,
               props.j,
-              carrier_cpuu.posicion,
-              carrier_cpuu.hundido
+              carrier_cpuu.position,
+              carrier_cpuu.sunken
             ) ||
-            devolverHundido(
+            devolversunken(
               props.i,
               props.j,
-              cruisers1_cpuu.posicion,
-              cruisers1_cpuu.hundido
+              cruisers1_cpuu.position,
+              cruisers1_cpuu.sunken
             ) ||
-            devolverHundido(
+            devolversunken(
               props.i,
               props.j,
-              cruisers2_cpuu.posicion,
-              cruisers2_cpuu.hundido
+              cruisers2_cpuu.position,
+              cruisers2_cpuu.sunken
             ) ||
-            devolverHundido(
+            devolversunken(
               props.i,
               props.j,
-              cruisers3_cpuu.posicion,
-              cruisers3_cpuu.hundido
+              cruisers3_cpuu.position,
+              cruisers3_cpuu.sunken
             ) ||
-            devolverHundido(
+            devolversunken(
               props.i,
               props.j,
-              submarine_cpuu.posicion,
-              submarine_cpuu.hundido
+              submarine_cpuu.position,
+              submarine_cpuu.sunken
             ) ? (
               <Fragment>
                 <div className="grid">
@@ -566,7 +558,7 @@ const Cell = (props) => {
             <Fragment>
               <div className="grid">
                 <button
-                  className="cells celeste "
+                  className="cells lightBlue "
                   onMouseOver={handleHover}
                   onClick={hadleClick}
                   disabled

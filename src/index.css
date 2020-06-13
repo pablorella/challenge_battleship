@@ -7,11 +7,15 @@
   border: 1px solid;
   background: #ddf4df;
 }
-.blanco {
-  background: #ddf4df;
+@media (min-width: 1000px) {
+  .grid {
+    display: grid;
+    grid-template-columns: 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px;
+    grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px;
+  }
 }
 
-.celeste {
+.lightBlue {
   background: #40bfbb;
 }
 
@@ -22,13 +26,10 @@
   background: orange;
 }
 
-.celeste {
-  background: #40bfbb;
-}
 .red {
   background: red;
 }
-.celeste-border {
+.lightBlue-border {
   border: solid;
   border-color: #40bfbb;
 }
