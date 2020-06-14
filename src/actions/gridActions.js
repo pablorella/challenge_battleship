@@ -119,10 +119,10 @@ const assignSubmarineShip = (grid) => ({
 });
 export function startGame(grid) {
   return (dispatch) => {
-    dispatch(iniciarJuego(grid));
+    dispatch(startGamee(grid));
   };
 }
-const iniciarJuego = (grid) => ({
+const startGamee = (grid) => ({
   type: START_GAME,
   payload: grid,
 });

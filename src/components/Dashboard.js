@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 import Grid from "./ui/Grid";
-import ShowBoats from "./ShowBoats";
+import Army from "./Army";
 import { useDispatch, useSelector } from "react-redux";
 import { enableGrid } from "../actions/gridActions";
 
@@ -53,7 +53,7 @@ const Dashboard = () => {
               </Fragment>
             )}
             {activateGridd ? (
-              <ShowBoats />
+              <Army />
             ) : (
               <form onSubmit={submitNuevoProducto} className="">
                 <label className="">Enter player name</label>
@@ -73,7 +73,7 @@ const Dashboard = () => {
             )}
           </div>
           {gameStartedPlay && (
-            <h1 className="rojo">click on cpu to find the boat</h1>
+            <h1 className="redLabel">click on cpu to find the boat</h1>
           )}
         </div>
       )}

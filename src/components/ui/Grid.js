@@ -18,7 +18,14 @@ const Grid = ({ owner }) => {
     <Fragment>
       <div className="grid">
         {matrix.map((row, i) =>
-          row.map((col, j) => <Cell owner={owner} i={i} j={j} />)
+          row.map((col, j) => (
+            <Cell
+              key={i.toString() + "" + j.toString()}
+              owner={owner}
+              i={i}
+              j={j}
+            />
+          ))
         )}
       </div>
     </Fragment>

@@ -56,52 +56,38 @@ const initialState = {
     [5, 4],
     [6, 5],
     [9, 9],
+    [3, 3],
+    [3, 2],
+    [7, 8],
+    [7, 9],
+    [0, 5],
+    [0, 3],
   ],
   humanImpactedCells: [],
   lastImpact: true,
 
   carrier_cpu: {
-    position: [
-      [0, 1],
-      [0, 2],
-      [0, 3],
-      [0, 4],
-    ],
+    position: [],
     impacts: 0,
     sunken: false,
   },
   cruisers1_cpu: {
-    position: [
-      [1, 1],
-      [1, 2],
-      [1, 3],
-    ],
+    position: [],
     impacts: 0,
     sunken: false,
   },
   cruisers2_cpu: {
-    position: [
-      [5, 6],
-      [5, 7],
-      [5, 8],
-    ],
+    position: [],
     impacts: 0,
     sunken: false,
   },
   cruisers3_cpu: {
-    position: [
-      [7, 6],
-      [7, 7],
-      [7, 8],
-    ],
+    position: [],
     impacts: 0,
     sunken: false,
   },
   submarine_cpu: {
-    position: [
-      [9, 8],
-      [9, 9],
-    ],
+    position: [],
     impacts: 0,
     sunken: false,
   },
@@ -212,6 +198,26 @@ export default function (state = initialState, action) {
       return {
         ...state,
         gameStarted: true,
+        carrier_cpu: {
+          ...state.carrier_cpu,
+          position: action.payload.positionCarrier_cpu,
+        },
+        cruisers1_cpu: {
+          ...state.cruisers1_cpu,
+          position: action.payload.positionCruisers1_cpu,
+        },
+        cruisers2_cpu: {
+          ...state.cruisers2_cpu,
+          position: action.payload.positionCruisers2_cpu,
+        },
+        cruisers3_cpu: {
+          ...state.cruisers3_cpu,
+          position: action.payload.positionCruisers3_cpu,
+        },
+        submarine_cpu: {
+          ...state.submarine_cpu,
+          position: action.payload.submarine_cpu,
+        },
       };
     case CHANGUE_TURN_HUMAN:
       return {

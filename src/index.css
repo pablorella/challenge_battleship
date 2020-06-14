@@ -13,6 +13,10 @@
     grid-template-columns: 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px;
     grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px;
   }
+  .redLabel {
+    justify-content: center;
+    margin-left: 20%;
+  }
 }
 
 .lightBlue {
@@ -28,6 +32,9 @@
 
 .red {
   background: red;
+}
+.redLabel {
+  color: red;
 }
 .lightBlue-border {
   border: solid;
